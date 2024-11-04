@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@vis.gl/react-google-maps": "^1.4.0",
+    "dotenv": "^16.4.5"
+  }
+}
