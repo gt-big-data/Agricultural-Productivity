@@ -14,13 +14,13 @@ export default function useDrawingManager() {
 
         const drawingManager = new drawing.DrawingManager({
             map: map,
-            drawingMode: drawing.OverlayType.POLYGON,
+            drawingMode: drawing.OverlayType.RECTANGLE,
             drawingControl: true,
             drawingControlOptions: {
                 position: ControlPosition.TOP_CENTER,
-                drawingModes: ['polygon'],
+                drawingModes: ['rectangle'],
             },
-            polygonOptions: {
+            rectangleOptions: {
                 fillColor: '#FF0000',
                 fillOpacity: 0.5,
                 strokeWeight: 1,

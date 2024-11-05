@@ -12,7 +12,7 @@ function App() {
   return (
     <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY} onLoad={() => console.log('Maps API has loaded.')}>
       <MapContext.Provider value={[drawingManager, setDrawingManager]}>
-        <MainMap drawable={true}/>
+        <MainMap />
         <Sidebar />
       </MapContext.Provider>
     </APIProvider>
