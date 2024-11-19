@@ -8,12 +8,15 @@ export const MapContext = createContext();
 
 function App() {
   const [drawingManager, setDrawingManager] = useState();
+  const [infoWindow, setInfoWindow] = useState();
+  const [markerPosition, setMarkerPosition] = useState();
 
+  console.log({markerPosition});
+  
   return (
     <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY} onLoad={() => console.log('Maps API has loaded.')}>
-      <MapContext.Provider value={[drawingManager, setDrawingManager]}>
+      <MapContext.Provider value={[drawingManager, setDrawingManager, infoWindow, setInfoWindow, markerPosition, setMarkerPosition]}>
         <MainMap />
-        <Sidebar />
       </MapContext.Provider>
     </APIProvider>
   );

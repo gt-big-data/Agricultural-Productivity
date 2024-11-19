@@ -1,16 +1,16 @@
 import { ControlPosition, useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useContext, useEffect, useState } from "react"
 import { MapContext } from "../App";
-export default function useDrawingManager() {
-    const [drawingManager, setDrawingManager] = useContext(MapContext);
+let coordinates; 
 
+export default function useDrawingManager() {
+    const [drawingManager, setDrawingManager, infoWindow, setInfoWindow, markerPosition, setMarkerPosition] = useContext(MapContext);
     const map = useMap();
     const drawing = useMapsLibrary("drawing");
     const google = window.google;
 
     useEffect(() => {
         if (!map || !drawing) return;
-
         const drawingManager = new drawing.DrawingManager({
             map: map,
             drawingMode: drawing.OverlayType.RECTANGLE,
@@ -30,13 +30,14 @@ export default function useDrawingManager() {
         });
 
        
-        let coordinates; 
         setDrawingManager(drawingManager);
         google.maps.event.addListener(drawingManager, 'rectanglecomplete', function(rectangle) {
+            drawingManager.setMap(null);
             coordinates = rectangle.getBounds(); // returns SW and NE coordinates
+            setMarkerPosition(coordinates);
+            console.log(coordinates);
             const bounds = coordinates;
-              const srcImage =
-                "https://developers.google.com/maps/documentation/" + "javascript/examples/full/images/talkeetna.png";
+            const srcImage = "https://developers.google.com/maps/documentation/" + "javascript/examples/full/images/talkeetna.png";
             
               // The custom USGSOverlay object contains the USGS image,
               // the bounds of the image, and a reference to the map.
@@ -112,15 +113,16 @@ export default function useDrawingManager() {
                   }
                 }
               }
-            
               const overlay = new USGSOverlay(bounds, srcImage);
-            
               overlay.setMap(map);
         }
-    )
+      )
         return () => {
             drawingManager.setMap(null);
         }
 
     }, [drawing, map])
 }
+
+export {coordinates};
+

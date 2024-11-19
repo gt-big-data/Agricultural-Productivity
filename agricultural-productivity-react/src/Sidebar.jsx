@@ -9,7 +9,6 @@ function Sidebar() {
             <div button="button">
                 <button onClick={() => {
                     drawingManager.setMap(null);
-                    
                 }}>
                     Proceed </button>
             </div>
