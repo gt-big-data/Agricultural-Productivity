@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Maps Drag Box with Static Land Image Overlay</title>
+  <style>
+    /* Set the size of the map */
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* Style for the overlay image */
+    .overlay-image {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.7; /* Adjust transparency */
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    let map;
+    let rectangle;
+    let overlayImage;
+
+    function initMap() {
+      // Initialize the map
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 37.7749, lng: -122.4194 }, // San Francisco as an example
+        zoom: 10,
+      });
+
+      // Create a draggable rectangle
+      const bounds = {
+        north: 37.8,
+        south: 37.7,
+        east: -122.4,
+        west: -122.5,
+      };
+
+      rectangle = new google.maps.Rectangle({
+        bounds: bounds,
+        editable: true,
+        draggable: true,
+        map,
+      });
+
+      // Add a listener for rectangle bounds change
+      rectangle.addListener("bounds_changed", overlayImageOnBounds);
+    }
+
+    function overlayImageOnBounds() {
+      const bounds = rectangle.getBounds();
+      const ne = map.getProjection().fromLatLngToPoint(bounds.getNorthEast());
+      const sw = map.getProjection().fromLatLngToPoint(bounds.getSouthWest());
+
+      const scale = Math.pow(2, map.getZoom());
+      const overlayDiv = map.getDiv();
+
+      // Calculate pixel coordinates
+      const left = ne.x * scale;
+      const top = sw.y * scale;
+      const right = sw.x * scale;
+      const bottom = ne.y * scale;
+
+      // Remove existing overlay
+      if (overlayImage) {
+        overlayImage.parentNode.removeChild(overlayImage);
+      }
+
+      // Create a new overlay image
+      overlayImage = document.createElement("img");
+      overlayImage.src =
+        "https://via.placeholder.com/500?text=Land+Image"; // Replace with your image
+      overlayImage.className = "overlay-image";
+      overlayImage.style.position = "absolute";
+      overlayImage.style.left = `${left}px`;
+      overlayImage.style.top = `${top}px`;
+      overlayImage.style.width = `${right - left}px`;
+      overlayImage.style.height = `${bottom - top}px`;
+
+      // Append the image to the map container
+      overlayDiv.appendChild(overlayImage);
+    }
+
+    // Load Google Maps script dynamically
+    const script = document.createElement("script");
+    script.src =
+      "https://maps.googleapis.com/maps/api/js?key=AIzaSyCJYWyMSK4rLfYj1I3HPtyU-pjlod_DEhU&callback=initMap";
+    script.async = true;
+    document.head.appendChild(script);
+  </script>
+</body>
+</html>
