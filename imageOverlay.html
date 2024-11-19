@@ -20,16 +20,16 @@
     function initMap() {
       // Initialize the map
       map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 37.7749, lng: -122.4194 }, // San Francisco
+        center: { lat: 41.8780, lng: -93.0977 }, // IOWA
         zoom: 10,
       });
 
       // Define the initial bounds of the rectangle
       const bounds = {
-        north: 37.8,
-        south: 37.7,
-        east: -122.4,
-        west: -122.5,
+        north: 42.1, // Northern latitude
+        south: 41.7, // Southern latitude
+        east: -92.8, // Eastern longitude
+        west: -93.5, // Western longitude
       };
 
       // Create a draggable rectangle
@@ -42,7 +42,7 @@
 
       // Create the initial ground overlay
       groundOverlay = new google.maps.GroundOverlay(
-        "https://via.placeholder.com/500x500.png?text=Overlay+Image",
+        "https://databasin2-filestore.s3.amazonaws.com/639389ad6ae749da8c117952c3af75f2/images/preview.png?v=1310509685",
         bounds,
         {
           opacity: 1, // Adjust transparency
@@ -64,7 +64,7 @@
 
       // Add a new overlay with updated bounds
       groundOverlay = new google.maps.GroundOverlay(
-        "https://via.placeholder.com/500x500.png?text=Overlay+Image",
+        "https://databasin2-filestore.s3.amazonaws.com/639389ad6ae749da8c117952c3af75f2/images/preview.png?v=1310509685",
         bounds,
         {
           opacity: 1, // Adjust transparency
@@ -73,7 +73,7 @@
       groundOverlay.setMap(map);
     }
 
-    // Load the Google Maps script dynamically
+    // Load the Google Maps script
     const script = document.createElement("script");
     script.src =
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyCJYWyMSK4rLfYj1I3HPtyU-pjlod_DEhU&callback=initMap";
