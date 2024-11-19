@@ -34,11 +34,11 @@ export default function useDrawingManager() {
         google.maps.event.addListener(drawingManager, 'rectanglecomplete', function(rectangle) {
             drawingManager.setMap(null);
             coordinates = rectangle.getBounds(); // returns SW and NE coordinates
+
             setMarkerPosition(coordinates);
             console.log(coordinates);
             const bounds = coordinates;
-            const srcImage = "https://developers.google.com/maps/documentation/" + "javascript/examples/full/images/talkeetna.png";
-            
+            const srcImage = "/iowa.png";
               // The custom USGSOverlay object contains the USGS image,
               // the bounds of the image, and a reference to the map.
               class USGSOverlay extends google.maps.OverlayView {
@@ -50,6 +50,7 @@ export default function useDrawingManager() {
                   // Initialize all properties.
                   this.bounds_ = bounds;
                   this.image_ = image;
+                  console.log(image);
                   // Define a property to hold the image's div. We'll
                   // actually create this div upon receipt of the onAdd()
                   // method so we'll leave it null for now.
