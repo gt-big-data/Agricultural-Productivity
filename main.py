@@ -121,10 +121,10 @@ for year in range(args.start_year, args.end_year + 1):
             product, info = queryProducts(
                 year,
                 month,
+                args.day,
                 tile["name"],
                 tile["intersection"],
                 maxCloudCover=args.max_cloud_cover,
-                day=args.day          #added new line for day, pass the day parameter here
             )
 
             tileName = tile["name"]
