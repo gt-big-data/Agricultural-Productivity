@@ -56,6 +56,13 @@ argparser.add_argument(
 )
 
 argparser.add_argument(
+    "-d",
+    "--day",
+    type=int,
+    help="The day of the month to query for (optional). If provided, only data from this day is queried.",
+)
+
+argparser.add_argument(
     "-sy",
     "--start-year",
     type=int,
@@ -117,6 +124,7 @@ for year in range(args.start_year, args.end_year + 1):
                 tile["name"],
                 tile["intersection"],
                 maxCloudCover=args.max_cloud_cover,
+                day=args.day          #added new line for day, pass the day parameter here
             )
 
             tileName = tile["name"]

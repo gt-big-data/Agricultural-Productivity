@@ -13,12 +13,32 @@ def queryProducts(
     shape: shapely.Polygon,
     maxCloudCover=20,
     minIntersection: float = 0.8,
+    day: int = None,  # new optional parameter
 ):
     assert month >= 1 and month <= 12
 
     DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-    queryURL = f"https://catalogue.dataspace.copernicus.eu/odata/v1/Products?$filter=Collection/Name eq 'SENTINEL-2' and ContentDate/Start gt {year}-{month:02}-01T00:00:00.000Z and ContentDate/Start lt {year}-{month:02}-{DAYS_IN_MONTH[month - 1]}T00:00:00.000Z and Attributes/OData.CSC.StringAttribute/any(att:att/Name eq 'tileId' and att/OData.CSC.StringAttribute/Value eq '{tile}') and contains(Name,'L2A') and Attributes/OData.CSC.DoubleAttribute/any(att:att/Name eq 'cloudCover' and att/OData.CSC.DoubleAttribute/Value le {maxCloudCover})&$top=1000&$expand=Attributes"
+    if day is not None:
+        start_date = f"{year}-{month:02}-{day:02}T00:00:00.000Z"
+        end_date = f"{year}-{month:02}-{day:02}T23:59:59.999Z"
+    else:
+        start_date = f"{year}-{month:02}-01T00:00:00.000Z"
+        # Use the last day of the month (you might want to account for leap years if needed)
+        end_date = f"{year}-{month:02}-{DAYS_IN_MONTH[month - 1]}T00:00:00.000Z"
+
+    queryURL = (
+    f"https://catalogue.dataspace.copernicus.eu/odata/v1/Products?"
+    f"$filter=Collection/Name eq 'SENTINEL-2' and "
+    f"ContentDate/Start gt {start_date} and "
+    f"ContentDate/Start lt {end_date} and "
+    f"Attributes/OData.CSC.StringAttribute/any(att:att/Name eq 'tileId' and "
+    f"att/OData.CSC.StringAttribute/Value eq '{tile}') and "
+    f"contains(Name,'L2A') and "
+    f"Attributes/OData.CSC.DoubleAttribute/any(att:att/Name eq 'cloudCover' and "
+    f"att/OData.CSC.DoubleAttribute/Value le {maxCloudCover})&"
+    f"$top=1000&$expand=Attributes"
+    )
 
     response = http.request("GET", queryURL, timeout=30)
     data = json.loads(response.data.decode('utf-8'))
